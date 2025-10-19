@@ -40,8 +40,26 @@ public class StringSplitAndAddCalculator {
         String[] tokens = numbers.split(delimiterPattern, -1);
         int sum = 0;
         for (String token : tokens) {
-            sum += Integer.parseInt(token);
+            validateToken(token);
+            sum += parsePositiveInt(token);
         }
         return sum;
+    }
+
+    private static void validateToken(String token) {
+        if (token.isBlank()) {
+            throw new IllegalArgumentException("잘못된 입력: 빈 숫자 토큰");
+        }
+        if (!token.matches("\\d+")) { // "\\d+" : 숫자가 한 자리 이상 연속된 문자열 전체
+            throw new IllegalArgumentException("숫자가 아닌 문자가 포함되었습니다: " + token);
+        }
+    }
+
+    private static int parsePositiveInt(String token) {
+        int num = Integer.parseInt(token);
+        if (num < 0) {
+            throw new IllegalArgumentException("음수는 허용되지 않습니다: " + token);
+        }
+        return num;
     }
 }
