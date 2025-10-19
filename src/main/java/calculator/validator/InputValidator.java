@@ -7,7 +7,7 @@ public class InputValidator {
         if (token.isBlank()) {
             throw new IllegalArgumentException(ErrorMessage.EMPTY_TOKEN);
         }
-        if (!token.matches("\\d+")) {
+        if (!token.matches("-?\\d+")) {
             throw new IllegalArgumentException(ErrorMessage.NON_DIGIT + token);
         }
     }
