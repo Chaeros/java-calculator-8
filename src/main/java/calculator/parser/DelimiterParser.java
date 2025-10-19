@@ -25,12 +25,7 @@ public class DelimiterParser {
             }
 
             String custom = numbers.substring(2, newlineIdx);
-            if (custom.isEmpty()) {
-                throw new IllegalArgumentException(ErrorMessage.EMPTY_DELIMITER);
-            }
-            if (custom.chars().allMatch(Character::isDigit)) {
-                throw new IllegalArgumentException(ErrorMessage.NUMERIC_DELIMITER + custom);
-            }
+            validateCustomDelimiter(custom);
 
             customDelimiters.add(Pattern.quote(custom));
             numbers = numbers.substring(newlineIdx + 2); // 다음 커스텀 구분자 탐색
@@ -42,5 +37,14 @@ public class DelimiterParser {
             delimiterPattern += "|" + String.join("|", customDelimiters);
         }
         return new DelimiterParseResult(delimiterPattern, numbers);
+    }
+
+    private static void validateCustomDelimiter(String delimiter) {
+        if (delimiter.isEmpty()) {
+            throw new IllegalArgumentException(ErrorMessage.EMPTY_DELIMITER);
+        }
+        if (delimiter.chars().allMatch(Character::isDigit)) {
+            throw new IllegalArgumentException(ErrorMessage.NUMERIC_DELIMITER + delimiter);
+        }
     }
 }
