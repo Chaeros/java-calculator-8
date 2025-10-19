@@ -37,6 +37,11 @@ public class StringSplitAndAddCalculator {
             delimiterPattern += "|" + String.join("|", customDelimiters);
         }
 
-        return 0;
+        String[] tokens = numbers.split(delimiterPattern, -1);
+        int sum = 0;
+        for (String token : tokens) {
+            sum += Integer.parseInt(token);
+        }
+        return sum;
     }
 }
