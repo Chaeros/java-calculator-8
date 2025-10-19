@@ -1,5 +1,7 @@
 package calculator;
 
+import calculator.util.ErrorMessage;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -17,15 +19,15 @@ public class StringSplitAndAddCalculator {
         while (numbers.startsWith("//")) {
             int newlineIdx = numbers.indexOf("\\n");
             if (newlineIdx < 0) {
-                throw new IllegalArgumentException("잘못된 커스텀 구분자 형식입니다. '//' 이후 '\\n'이 반드시 입력되어야 합니다.");
+                throw new IllegalArgumentException(ErrorMessage.INVALID_FORMAT);
             }
 
             String custom = numbers.substring(2, newlineIdx); // 커스텀 구분자로 포함된 문자열
             if (custom.isEmpty()) {
-                throw new IllegalArgumentException("커스텀 구분자가 비어 있습니다.");
+                throw new IllegalArgumentException(ErrorMessage.EMPTY_DELIMITER);
             }
             if (custom.chars().allMatch(Character::isDigit)) {
-                throw new IllegalArgumentException("커스텀 구분자는 숫자가 될 수 없습니다: " + custom);
+                throw new IllegalArgumentException(ErrorMessage.NUMERIC_DELIMITER + custom);
             }
 
             customDelimiters.add(Pattern.quote(custom));
@@ -48,17 +50,17 @@ public class StringSplitAndAddCalculator {
 
     private static void validateToken(String token) {
         if (token.isBlank()) {
-            throw new IllegalArgumentException("잘못된 입력: 빈 숫자 토큰");
+            throw new IllegalArgumentException(ErrorMessage.EMPTY_TOKEN);
         }
         if (!token.matches("\\d+")) { // "\\d+" : 숫자가 한 자리 이상 연속된 문자열 전체
-            throw new IllegalArgumentException("숫자가 아닌 문자가 포함되었습니다: " + token);
+            throw new IllegalArgumentException(ErrorMessage.NON_DIGIT + token);
         }
     }
 
     private static int parsePositiveInt(String token) {
         int num = Integer.parseInt(token);
         if (num < 0) {
-            throw new IllegalArgumentException("음수는 허용되지 않습니다: " + token);
+            throw new IllegalArgumentException(ErrorMessage.NEGATIVE + token);
         }
         return num;
     }
